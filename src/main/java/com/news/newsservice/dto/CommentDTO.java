@@ -21,8 +21,5 @@ public class CommentDTO {
     @NotNull
     private Long senderUserId;
 
-    @NotNull
-    private Long bulletinId;
-
     private Long commentId;
 }

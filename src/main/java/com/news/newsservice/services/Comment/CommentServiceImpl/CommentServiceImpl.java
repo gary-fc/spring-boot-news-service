@@ -1,7 +1,9 @@
 package com.news.newsservice.services.Comment.CommentServiceImpl;
 
+import com.news.newsservice.domain.Bulletin;
 import com.news.newsservice.domain.Comment;
 import com.news.newsservice.dto.CommentDTO;
+import com.news.newsservice.repository.BulletinRepository;
 import com.news.newsservice.repository.CommentRepository;
 import com.news.newsservice.services.Comment.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +18,16 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     CommentRepository commentRepository;
 
+    @Autowired
+    BulletinRepository bulletinRepository;
+
     @Override
-    public Comment createComment(CommentDTO commentDTO) {
-        Comment comment = this.composeComment(commentDTO);
+    public Comment createComment(Long bulletinId, CommentDTO commentDTO) {
+        Bulletin bulletin = bulletinRepository.getById(bulletinId);
+        Comment comment = this.composeComment(commentDTO, bulletin);
         return commentRepository.save(comment);
     }
+
 
     @Override
     public List<Comment> getListAllComment() {
@@ -38,11 +45,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public List<Comment> getCommentsByBulletinId(Long id) {
+        return commentRepository.getAllByBulletinId(id);
+    }
+
+    @Override
     public void deleteCommentById(Long id) {
         commentRepository.deleteById(id);
     }
 
-    private Comment composeComment(CommentDTO commentDTO){
+    private Comment composeComment(CommentDTO commentDTO, Bulletin bulletin) {
         Comment comment = new Comment();
         comment.setAccountId(commentDTO.getAccountId());
         comment.setContent(commentDTO.getContent());
@@ -50,8 +62,8 @@ public class CommentServiceImpl implements CommentService {
         comment.setIsDeleted(false);
         comment.setRepliesCounter(0);
         comment.setSenderUserId(commentDTO.getSenderUserId());
-        comment.setBulletin(commentDTO.getBulletinId());
-        comment.setParentComment(commentDTO.getCommentId());
+        comment.setBulletin(bulletin);
+        comment.setBulletinId(bulletin.getId());
         return comment;
     }
 }

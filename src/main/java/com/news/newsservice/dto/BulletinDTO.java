@@ -22,4 +22,7 @@ public class BulletinDTO {
     @NotNull
     private String body;
 
+    // TODO: Implementation should be removed when the upload files are will ready.
+    private String fileUrl;
+
 }

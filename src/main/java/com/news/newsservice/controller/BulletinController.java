@@ -1,20 +1,20 @@
 package com.news.newsservice.controller;
 
 import com.news.newsservice.common.util.BulletinResponseBuilder;
-import com.news.newsservice.common.util.BulletinsResponseBuilder;
 import com.news.newsservice.domain.Bulletin;
+import com.news.newsservice.domain.Comment;
 import com.news.newsservice.dto.BulletinDTO;
+import com.news.newsservice.dto.CommentDTO;
 import com.news.newsservice.exceptions.ResourceNotFoundException;
 import com.news.newsservice.responses.BulletinResponse;
 import com.news.newsservice.services.Auth.AuthService;
 import com.news.newsservice.services.Bulletin.BulletinService;
+import com.news.newsservice.services.Comment.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/bulletins/")
+@RequestMapping("/api/bulletins")
 @CrossOrigin(origins = "*")
 public class BulletinController {
 
@@ -22,9 +22,12 @@ public class BulletinController {
     private BulletinService bulletinService;
 
     @Autowired
+    private CommentService commentService;
+
+    @Autowired
     private AuthService authService;
 
-    @PostMapping("/createBulletin")
+    @PostMapping()
     public BulletinResponse createBulletin(@RequestBody BulletinDTO bulletinDTO) throws RuntimeException {
         if (authService.userExistsByAccountId(bulletinDTO.getAccountId())) {
             Bulletin bulletin = bulletinService.createBulletin(bulletinDTO);
@@ -33,30 +36,31 @@ public class BulletinController {
         throw new ResourceNotFoundException("Account", "accountId", bulletinDTO.getAccountId());
     }
 
-    @DeleteMapping("/byId/{id}")
+    @GetMapping("/{id}")
+    public Bulletin readBulletinById(@PathVariable(name = "id") Long id) {
+        return bulletinService.getBulletinById(id);
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteBulletinById(@PathVariable(name = "id") Long id) {
         bulletinService.deleteBulletinById(id);
     }
 
-
-    @GetMapping
-    public List<BulletinResponse> getListAllBulletin() {
-        return BulletinsResponseBuilder.getInstance(bulletinService.getListAllBulletin()).getBulletinsList();
+    @PostMapping("{bulletinId}/comments")
+    public Comment createComment(@PathVariable(name = "bulletinId") Long bulletinId, @RequestBody CommentDTO commentDTO) throws RuntimeException {
+        System.out.println(bulletinId);
+        return commentService.createComment(bulletinId, commentDTO);
     }
 
-    @GetMapping("/paginated")
-    public List<BulletinResponse> getListPaginatedBulletins(@RequestParam int pageNo, @RequestParam int pageSize) {
-        return BulletinsResponseBuilder.getInstance(bulletinService.getListPaginatedBulletins(pageNo, pageSize)).getBulletinsList();
+    @GetMapping("{bulletinId}/comments/{id}")
+    public Comment readCommentById(@PathVariable(name = "bulletinId") Long bulletinId, @PathVariable(name = "id") Long id) {
+        return commentService.getCommentById(id);
     }
 
-    @GetMapping("/listByAccountId/{id}")
-    public List<Bulletin> getBulletinsByAccountId(@PathVariable(name = "id") Long id) {
-        return bulletinService.getBulletinsByAccountId(id);
+    @DeleteMapping("{bulletinId}/comments/{commentId}")
+    public Comment deleteComment(@PathVariable(name = "bulletinId") Long bulletinId, @PathVariable(name = "commentId") Long commentId, @RequestBody CommentDTO commentDTO) throws RuntimeException {
+        return commentService.createComment(bulletinId, commentDTO);
     }
 
-    @GetMapping("/byId/{id}")
-    public Bulletin getBulletinById(@PathVariable(name = "id") Long id) {
-        return bulletinService.getBulletinById(id);
-    }
 
 }

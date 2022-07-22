@@ -2,6 +2,7 @@ package com.news.newsservice.controller;
 
 import com.news.newsservice.common.util.AttachmentResponseBuilder;
 import com.news.newsservice.common.util.AttachmentsResponseBuilder;
+import com.news.newsservice.domain.Attachment;
 import com.news.newsservice.dto.AttachmentDTO;
 import com.news.newsservice.responses.AttachmentResponse;
 import com.news.newsservice.services.Attachment.AttachmentService;
@@ -17,14 +18,19 @@ public class AttachmentController {
     @Autowired
     AttachmentService attachmentService;
 
-    @PostMapping("createAttachment")
-    public AttachmentResponse createAttachment(@RequestBody AttachmentDTO attachmentDTO) {
-        return AttachmentResponseBuilder.getInstance(attachmentService.createAttachment(attachmentDTO)).buildAttachmentResponse();
+    @PostMapping()
+    public Attachment createAttachment(@RequestBody AttachmentDTO attachmentDTO) {
+        return attachmentService.createAttachment(attachmentDTO);
     }
 
-    @GetMapping("/byId/{id}")
+    @GetMapping("/{id}")
     public AttachmentResponse getAttachmentById(@PathVariable(name = "id") Long id) {
         return AttachmentResponseBuilder.getInstance(attachmentService.getAttachmentById(id)).buildAttachmentResponse();
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteAttachmentById(@PathVariable(name = "id") Long id) {
+        attachmentService.deleteAttachmentById(id);
     }
 
     @GetMapping("/all/")
@@ -32,13 +38,15 @@ public class AttachmentController {
         return AttachmentsResponseBuilder.getInstance(attachmentService.getListAllAttachment()).buildAttachmentsResponseList();
     }
 
-    @GetMapping("/listByAccountId/{id}")
-    public List<AttachmentResponse> getAttachmentsByAccountId(@PathVariable(name = "id") Long id) {
-        return AttachmentsResponseBuilder.getInstance(attachmentService.getAttachmentsByAccountId(id)).buildAttachmentsResponseList();
+    @PutMapping("/{id}")
+    public AttachmentResponse putAttachmentById(@PathVariable(name = "id") Long id) {
+        return AttachmentResponseBuilder.getInstance(attachmentService.getAttachmentById(id)).buildAttachmentResponse();
     }
 
-    @DeleteMapping("/deleteById/{id}")
-    public void deleteAttachmentById(@PathVariable(name = "id") Long id){
-        attachmentService.deleteAttachmentById(id);
+    @PatchMapping("/{id}")
+    public AttachmentResponse patchAttachmentById(@PathVariable(name = "id") Long id) {
+        return AttachmentResponseBuilder.getInstance(attachmentService.getAttachmentById(id)).buildAttachmentResponse();
     }
+
+
 }

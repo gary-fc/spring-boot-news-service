@@ -63,6 +63,7 @@ public class BulletinServiceImpl implements BulletinService {
         Bulletin bulletin = new Bulletin();
         bulletin.setAccountId(bulletinDTO.getAccountId());
         bulletin.setBody(bulletinDTO.getBody());
+        bulletin.setFileUrl(bulletinDTO.getFileUrl());
         bulletin.setSenderUserId(bulletinDTO.getSenderUserId());
         bulletin.setCommentsCounter(0);
         bulletin.setCreatedDate(new Date());

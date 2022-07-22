@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,14 +16,18 @@ public class AttachmentDTO {
     private Long accountId;
 
     @NotNull
-    private Date created_date;
-
-    @NotNull
-    private String fileId;
-
-    @NotNull
-    private Boolean isDeleted;
-
-    @NotNull
     private Long bulletinId;
+
+    @NotNull
+    private String filePath;
+
+//    @NotNull
+//    private String fileId;
+//
+//    @NotNull
+//    private Date created_date;
+//
+//    @NotNull
+//    private Boolean isDeleted;
+
 }

@@ -19,4 +19,5 @@ public class BulletinResponse {
     private String body;
     private Date createdDate;
     private Integer commentsCounter;
+    private String fileUrl;
 }

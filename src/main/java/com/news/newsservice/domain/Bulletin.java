@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "bulletin")
@@ -34,4 +36,10 @@ public class Bulletin {
 
     @Column(name = "commentsCounter", nullable = false)
     private Integer commentsCounter;
+
+    @Column(name = "fileUrl")
+    private String fileUrl;
+
+    @OneToMany(targetEntity = Comment.class, mappedBy = "id", cascade = CascadeType.ALL)
+    private Set<Comment> comments = new HashSet<>();
 }

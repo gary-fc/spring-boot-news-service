@@ -21,6 +21,7 @@ public class BulletinResponseBuilder {
         bulletinResponse.setSenderUserId(bulletin.getSenderUserId());
         bulletinResponse.setCommentsCounter(bulletin.getCommentsCounter());
         bulletinResponse.setCreatedDate(bulletin.getCreatedDate());
+        bulletinResponse.setFileUrl(bulletin.getFileUrl());
         return this;
     }
 

@@ -6,20 +6,23 @@ import com.news.newsservice.responses.AttachmentResponse;
 public class AttachmentResponseBuilder {
     private AttachmentResponse attachmentResponse;
 
-    private AttachmentResponseBuilder(){
+    private AttachmentResponseBuilder() {
         attachmentResponse = new AttachmentResponse();
     }
 
-    public static AttachmentResponseBuilder getInstance(Attachment attachment){
+    public static AttachmentResponseBuilder getInstance(Attachment attachment) {
 
         return new AttachmentResponseBuilder().setAttachment(attachment);
     }
 
-    private AttachmentResponseBuilder setAttachment(Attachment attachment){
+    private AttachmentResponseBuilder setAttachment(Attachment attachment) {
+        attachmentResponse.setAccountId(attachment.getAccountId());
+        attachmentResponse.setFilePath(attachment.getFilePath());
+        attachmentResponse.setCreatedDate(attachment.getCreatedDate());
         return this;
     }
 
-    public AttachmentResponse buildAttachmentResponse(){
+    public AttachmentResponse buildAttachmentResponse() {
         return attachmentResponse;
     }
 }

@@ -18,12 +18,12 @@ public class BulletinsResponseBuilder {
         return new BulletinsResponseBuilder().setBulletinsList(bulletinList);
     }
 
+    public List<BulletinResponse> getBulletinsList() {
+        return bulletinResponseList;
+    }
+
     private BulletinsResponseBuilder setBulletinsList(List<Bulletin> bulletinList) {
         bulletinResponseList = bulletinList.stream().map(bulletin -> BulletinResponseBuilder.getInstance(bulletin).buildBulletinResponse()).collect(Collectors.toList());
         return this;
-    }
-
-    public List<BulletinResponse> getBulletinsList() {
-        return bulletinResponseList;
     }
 }
