@@ -5,33 +5,46 @@ import com.news.newsservice.domain.Comment;
 import com.news.newsservice.dto.CommentDTO;
 import com.news.newsservice.repository.BulletinRepository;
 import com.news.newsservice.repository.CommentRepository;
+import com.news.newsservice.responses.User;
+import com.news.newsservice.services.Auth.AuthService;
 import com.news.newsservice.services.Comment.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.news.newsservice.wrapper.CommentWrapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Service
+@Service("CommentServiceImpl")
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
-    CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
+    private final BulletinRepository bulletinRepository;
+    private final AuthService authService;
 
-    @Autowired
-    BulletinRepository bulletinRepository;
+    public CommentServiceImpl(CommentRepository commentRepository, BulletinRepository bulletinRepository, AuthService authService) {
+        this.commentRepository = commentRepository;
+        this.bulletinRepository = bulletinRepository;
+        this.authService = authService;
+    }
 
     @Override
-    public Comment createComment(Long bulletinId, CommentDTO commentDTO) {
+    public CommentWrapper createComment(Long bulletinId, CommentDTO commentDTO) {
         Bulletin bulletin = bulletinRepository.getById(bulletinId);
-        Comment comment = this.composeComment(commentDTO, bulletin);
-        return commentRepository.save(comment);
+        Comment comment = commentRepository.save(composeComment(commentDTO, bulletin));
+        User user = authService.userByAccountId(bulletin.getAccountId());
+        return composeCommentWrapper(comment, user);
     }
 
 
     @Override
-    public List<Comment> getListAllComment() {
-        return commentRepository.findAll();
+    public List<CommentWrapper> getListAllComment() {
+        List<Comment> comments = commentRepository.findAll();
+        List<CommentWrapper> commentWrappers = new LinkedList<>();
+        commentWrappers = comments.stream().map(bulletin -> composeCommentWrapper(bulletin,
+                authService.userByAccountId(bulletin.getAccountId()))).collect(Collectors.toList());
+        return commentWrappers;
     }
 
     @Override
@@ -45,8 +58,12 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getCommentsByBulletinId(Long id) {
-        return commentRepository.getAllByBulletinId(id);
+    public List<CommentWrapper> getCommentsByBulletinId(Long id) {
+        List<Comment> comments = commentRepository.getAllByBulletinId(id);
+        List<CommentWrapper> commentWrappers = new LinkedList<>();
+        commentWrappers = comments.stream().map(bulletin -> composeCommentWrapper(bulletin,
+                authService.userByAccountId(bulletin.getAccountId()))).collect(Collectors.toList());
+        return commentWrappers;
     }
 
     @Override
@@ -65,5 +82,18 @@ public class CommentServiceImpl implements CommentService {
         comment.setBulletin(bulletin);
         comment.setBulletinId(bulletin.getId());
         return comment;
+    }
+
+    private CommentWrapper composeCommentWrapper(Comment comment, User user) {
+        CommentWrapper commentWrapper = new CommentWrapper();
+        commentWrapper.setId(comment.getId());
+        commentWrapper.setSenderUserId(comment.getSenderUserId());
+        commentWrapper.setRepliesCounter(comment.getRepliesCounter());
+        commentWrapper.setContent(comment.getContent());
+        commentWrapper.setCreateDate(comment.getCreateDate());
+        commentWrapper.setIsDeleted(comment.getIsDeleted());
+        commentWrapper.setUser(user);
+        commentWrapper.setBulletinId(comment.getBulletinId());
+        return commentWrapper;
     }
 }

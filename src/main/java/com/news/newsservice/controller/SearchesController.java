@@ -1,35 +1,40 @@
 package com.news.newsservice.controller;
 
-import com.news.newsservice.common.util.BulletinsResponseBuilder;
+import com.news.newsservice.common.utils.BulletinsResponseBuilder;
+import com.news.newsservice.common.utils.CommentsResponseBuilder;
 import com.news.newsservice.domain.Bulletin;
 import com.news.newsservice.domain.Comment;
 import com.news.newsservice.responses.BulletinResponse;
+import com.news.newsservice.responses.CommentResponse;
 import com.news.newsservice.services.Bulletin.BulletinService;
 import com.news.newsservice.services.Comment.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/searches/")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api-news/searches/")
 public class SearchesController {
 
-    @Autowired
-    CommentService commentService;
+    private final CommentService commentService;
+    private final BulletinService bulletinService;
 
     @Autowired
-    BulletinService bulletinService;
+    public SearchesController(CommentService commentService, @Qualifier("BulletinServiceImpl") BulletinService bulletinService) {
+        this.commentService = commentService;
+        this.bulletinService = bulletinService;
+    }
 
     @GetMapping("comments")
-    public List<Comment> getAllComment() {
-        return commentService.getListAllComment();
+    public List<CommentResponse> getAllComment() {
+        return CommentsResponseBuilder.getInstance(commentService.getListAllComment()).getCommentsList();
     }
 
     @GetMapping("comments/{bulletinId}")
-    public List<Comment> getCommentsByAccountId(@PathVariable(name = "bulletinId") Long bulletinId) {
-        return commentService.getCommentsByBulletinId(bulletinId);
+    public List<CommentResponse> getCommentsByAccountId(@PathVariable(name = "bulletinId") Long bulletinId) {
+        return CommentsResponseBuilder.getInstance(commentService.getCommentsByBulletinId(bulletinId)).getCommentsList();
     }
 
     @GetMapping("/bulletins")
@@ -38,7 +43,7 @@ public class SearchesController {
     }
 
     @GetMapping("/bulletins/page")
-    public List<BulletinResponse> getListPaginatedBulletins(@RequestParam int pageNo, @RequestParam int pageSize) {
+    public List<BulletinResponse> getListPaginatedBulletins(@RequestParam Integer pageNo, @RequestParam Integer pageSize) {
         return BulletinsResponseBuilder.getInstance(bulletinService.getListPaginatedBulletins(pageNo, pageSize)).getBulletinsList();
     }
 

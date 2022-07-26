@@ -1,7 +1,7 @@
 package com.news.newsservice.controller;
 
-import com.news.newsservice.common.util.AttachmentResponseBuilder;
-import com.news.newsservice.common.util.AttachmentsResponseBuilder;
+import com.news.newsservice.common.utils.AttachmentResponseBuilder;
+import com.news.newsservice.common.utils.AttachmentsResponseBuilder;
 import com.news.newsservice.domain.Attachment;
 import com.news.newsservice.dto.AttachmentDTO;
 import com.news.newsservice.responses.AttachmentResponse;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/attachments/")
+@RequestMapping("/api-news/attachments/")
 public class AttachmentController {
 
     @Autowired

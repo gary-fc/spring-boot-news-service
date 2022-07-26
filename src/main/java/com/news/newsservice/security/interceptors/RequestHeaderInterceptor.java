@@ -2,8 +2,6 @@ package com.news.newsservice.security.interceptors;
 
 import com.news.newsservice.dto.JwtDTO;
 import com.news.newsservice.services.Auth.AuthService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -13,9 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class RequestHeaderInterceptor implements HandlerInterceptor {
 
-    @Lazy
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    public RequestHeaderInterceptor(AuthService authService) {
+        this.authService = authService;
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

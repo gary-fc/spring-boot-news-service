@@ -1,20 +1,21 @@
 package com.news.newsservice.domain;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "bulletin")
+@Table(schema = "ONB", name = "bulletin")
 @Data
-@NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
-@AllArgsConstructor
 @Getter
 @Setter
-public class Bulletin {
+@EqualsAndHashCode(callSuper = false)
+public class Bulletin extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,12 +28,6 @@ public class Bulletin {
 
     @Column(name = "body", nullable = false)
     private String body;
-
-    @Column(name = "createdDate", nullable = false)
-    private Date createdDate;
-
-    @Column(name = "isDeleted", nullable = false)
-    private Boolean isDeleted;
 
     @Column(name = "commentsCounter", nullable = false)
     private Integer commentsCounter;

@@ -18,7 +18,6 @@ import java.util.Date;
 @Setter
 public class Comment {
 
-
     @ManyToOne(targetEntity = Bulletin.class, fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "bulletin")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

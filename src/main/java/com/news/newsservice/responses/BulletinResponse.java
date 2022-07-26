@@ -13,11 +13,11 @@ import java.util.Date;
 @Getter
 @Setter
 public class BulletinResponse {
-    private Long id;
-    private Long accountId;
+    private Long bulletinId;
     private Long senderUserId;
     private String body;
     private Date createdDate;
     private Integer commentsCounter;
     private String fileUrl;
+    private UserResponse userResponse;
 }

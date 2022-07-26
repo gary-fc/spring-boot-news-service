@@ -1,4 +1,4 @@
-package com.news.newsservice.common.util;
+package com.news.newsservice.common.utils;
 
 import com.news.newsservice.domain.Attachment;
 import com.news.newsservice.responses.AttachmentResponse;

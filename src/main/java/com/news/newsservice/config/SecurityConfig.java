@@ -1,4 +1,4 @@
-package com.news.newsservice.security;
+package com.news.newsservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -23,13 +23,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
-                .antMatchers("/api/bulletins/**").permitAll()
-                .antMatchers("/api/attachments/**").permitAll()
-                .antMatchers("/api/searches/**").permitAll()
-                .antMatchers("/api/comments/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api-news/**").permitAll()
+                .antMatchers("/api-news/bulletins/**").permitAll()
+                .antMatchers("/api-news/attachments/**").permitAll()
+                .antMatchers("/api-news/searches/**").permitAll()
+                .antMatchers("/api-news/comments/**").permitAll()
                 .anyRequest()
                 .authenticated();
-
     }
 }

@@ -2,16 +2,17 @@ package com.news.newsservice.services.Bulletin;
 
 import com.news.newsservice.domain.Bulletin;
 import com.news.newsservice.dto.BulletinDTO;
+import com.news.newsservice.wrapper.BulletinWrapper;
 
 import java.util.List;
 
 public interface BulletinService {
 
-    Bulletin createBulletin(BulletinDTO bulletinDTO);
+    BulletinWrapper createBulletin(BulletinDTO bulletinDTO);
 
-    List<Bulletin> getListAllBulletin();
+    List<BulletinWrapper> getListAllBulletin();
 
-    List<Bulletin> getListPaginatedBulletins(int pageNo, int pageSize);
+    List<BulletinWrapper> getListPaginatedBulletins(int pageNo, int pageSize);
 
     Bulletin getBulletinById(Long id);
 
